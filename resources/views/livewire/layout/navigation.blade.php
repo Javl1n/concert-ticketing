@@ -27,8 +27,8 @@ $logout = function (Logout $logout) {
                         <x-nav-link :href="route('organizer.dashboard')" :active="request()->routeIs('organizer.dashboard')" wire:navigate>
                             {{ __('Dashboard') }}
                         </x-nav-link>
-                        <x-nav-link :href="route('organizer.dashboard')" :active="request()->routeIs('')" wire:navigate>
-                            {{ __('Your Events') }}
+                        <x-nav-link :href="route('organizer.concerts.index')" :active="request()->routeIs('organizer.concerts.*')" wire:navigate>
+                            {{ __('Your Concerts') }}
                         </x-nav-link>
                     @elseauth('web')
                         <x-nav-link :href="route('user.home')" :active="request()->routeIs('user.home')" wire:navigate>

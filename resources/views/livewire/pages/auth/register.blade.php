@@ -43,8 +43,6 @@ $register = function () {
         Auth::guard('web')->login($user);
         $this->redirect(route('user.home', absolute: false), navigate: true);
     }
-
-
 };
 
 ?>
