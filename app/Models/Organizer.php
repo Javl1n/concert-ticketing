@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -44,5 +45,15 @@ class Organizer extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Get all of the concerts for the Organizer
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function concerts(): HasMany
+    {
+        return $this->hasMany(Concert::class);
     }
 }

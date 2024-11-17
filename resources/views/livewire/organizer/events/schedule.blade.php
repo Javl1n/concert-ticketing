@@ -11,16 +11,27 @@ state([
 $nextMonth = function () {
     $this->days = collect([]);
     $this->now->setDay(1);
+
     $this->now->setMonth($this->now->month + 1);
 };
 
 $prevMonth = function () {
+    if ($this->now->month == Carbon::now()->month) {
+        return;
+    }
     $this->days = collect([]);
     $this->now->setDay(1);
     $this->now->setMonth($this->now->month - 1);
+    if ($this->now->month == Carbon::now()->month) {
+        $this->now = Carbon::now();
+    }
 };
 
 $selectDay = function (int $day) {
+    if($day < $this->now->day) {
+        return;
+    }
+
     if($this->days->search($day) === false) {
         $this->days = $this->days->sort();
         if (!($this->days->first() - 1 === $day || $this->days->last() + 1 === $day)) {
