@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Concert;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
@@ -16,7 +17,7 @@ class OrganizerConcertController extends Controller
         $organizer = auth()->user();
         // dd($organizer->concerts->first()->Image);
         return view('organizers.events.index', [
-            'concerts' => $organizer->concerts,
+            'concerts' => $organizer->concerts()->orderBy('reservation_start')->get(),
         ]);
     }
 
@@ -32,6 +33,7 @@ class OrganizerConcertController extends Controller
     {   
         $firstDay = Carbon::create($request->firstDay);
         $lastDay = Carbon::create($request->lastDay);
+
 
         return view('organizers.events.create', [
             'firstDay' => $firstDay,
@@ -52,9 +54,14 @@ class OrganizerConcertController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Concert $concert)
     {
-        //
+        $carbon = new Carbon;
+
+        return view('organizers.events.show', [
+            'concert' => $concert,
+            'carbon' => $carbon
+        ]);
     }
 
     /**

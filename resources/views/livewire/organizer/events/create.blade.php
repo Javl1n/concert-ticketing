@@ -134,7 +134,7 @@ $save = function () {
             $this->concertDayStart->year, 
             $this->concertDayStart->month, 
             $this->concertDayStart->day,
-            $this->concertStart['time'] === 'AM' ? $this->concertStart['hour'] : $this->concertStart['hour'] + 12,
+            $this->concertStart['time'] !== 'AM' && $this->concertStart['hour'] < 12 ? $this->concertStart['hour'] + 12 : $this->concertStart['hour'],
             $this->concertStart['minute'],
             0
         ),
@@ -142,7 +142,7 @@ $save = function () {
             $this->concertDayEnd->year, 
             $this->concertDayEnd->month, 
             $this->concertDayEnd->day,
-            $this->concertEnd['time'] === 'AM' ? $this->concertEnd['hour'] : $this->concertEnd['hour'] + 12,
+            $this->concertEnd['time'] !== 'AM' && $this->concertEnd['hour'] < 12 ? $this->concertEnd['hour'] + 12 : $this->concertEnd['hour'],
             $this->concertEnd['minute'],
             0
         ),

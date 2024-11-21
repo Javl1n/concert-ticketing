@@ -5,7 +5,8 @@ use Illuminate\Support\Carbon;
 
 state([
     'now' => Carbon::now(),
-    'days' => collect([])
+    'days' => collect([]),
+    'concerts' => App\Models\Concert::all(),
 ]);
 
 $nextMonth = function () {
@@ -84,9 +85,17 @@ $nextPage = function () {
                 </div>
             @endfor
             @for ($item = 1; $item <= $this->now->copy()->daysInMonth; $item++)
-                <div wire:click='selectDay({{ $item }})' class="text-sm h-32 border pt-2 ps-2 transition {{ $this->days->search($item) !== false ? 'bg-purple-500 text-white font-bold border-purple-500' : 'hover:bg-purple-100' }}">
-                    {{ $this->now->copy()->day($item)->format('j') }}
-                </div>
+                @if($concert = $this->concerts->where('reservation_start', '<=', $this->now->copy()->day($item)->format('Y-m-d'))->where('reservation_end', '>=', $this->now->copy()->day($item)->format('Y-m-d'))->first())
+                    
+                    <div class="text-sm h-32 border pt-2 ps-2 transition text-white font-bold {{ $concert->organizer->id === auth()->user()->id ? 'bg-green-500 ' : 'bg-red-500' }}">
+                        {{ $this->now->copy()->day($item)->format('j') }}
+                    </div>
+                @else
+                    <div wire:click='selectDay({{ $item }})' class="text-sm h-32 border pt-2 ps-2 transition cursor-pointer {{ $this->days->search($item) !== false ? 'bg-purple-500 text-white font-bold border-purple-500' : 'hover:bg-purple-100' }}">
+                        {{ $this->now->copy()->day($item)->format('j') }}
+                    </div>
+                @endif
+                
             @endfor
             @for($blankEnd = 0; $blankEnd < 6 - $this->now->copy()->day($this->now->daysInMonth)->dayOfWeekIso; $blankEnd++)
                 <div class="h-32 border pt-2 ps-2">

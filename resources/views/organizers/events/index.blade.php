@@ -10,9 +10,17 @@
     </x-slot>
 
     <div class="py-8">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 grid grid-cols-3 gap-4">
             @foreach ($concerts as $concert)
-                <img class="w-20 h-20" src="{{ asset($concert->image->url) }}" alt="">
+                <a href="{{ route('organizer.concerts.show', ['concert' => $concert->id]) }}"
+                    class="flex flex-col bg-white border border-gray-200 rounded-lg shadow md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+                    <img class="w-full rounded-t-lg aspect-video object-center"
+                        src="{{ asset($concert->image->url) }}" alt="">
+                    <div class="p-4 leading-normal">
+                        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">{{ $concert->name }}</h5>
+                        <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{ Str::limit($concert->description, 100) }}</p>
+                    </div>
+                </a>
             @endforeach
         </div>
     </div> 

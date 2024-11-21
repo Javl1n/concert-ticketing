@@ -27,6 +27,9 @@ Route::controller(OrganizerConcertController::class)->middleware(['auth:organize
 
     Route::get('organizer/concerts/create', 'create')
         ->name('organizer.concerts.create');
+
+    Route::get('organizer/concerts/{concert}', 'show')
+        ->name('organizer.concerts.show');
 });
 
 

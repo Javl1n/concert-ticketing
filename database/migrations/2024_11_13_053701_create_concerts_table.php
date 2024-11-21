@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('concerts', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('description');
-            $table->date('reservation_start');
-            $table->date('reservation_end');
+            $table->text('description');
+            $table->timestamp('reservation_start');
+            $table->timestamp('reservation_end');
             $table->timestamp('concert_start');
             $table->timestamp('concert_end');
             $table->decimal('vip_price', places: 2);
