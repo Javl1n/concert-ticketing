@@ -109,6 +109,79 @@ $changeSeatState = function ($row, $column) {
     }
 };
 
+$save = function () {
+    // dd(auth()->user());
+    $this->validate([
+        'concertPhoto' => 'required|mimes:png,jpg',
+        'gcashPhoto' => 'required|mimes:png,jpg',
+        'name' => 'required',
+        'description' => 'required',
+        'concertStart.hour' => 'required|numeric|lte:12|gte:1',
+        'concertEnd.hour' => 'required|numeric|lte:12|gte:1',
+        'concertStart.minute' => 'required|numeric|lt:60|gte:0',
+        'concertEnd.minute' => 'required|numeric|lt:60|gte:0',
+        'tickets.general' => 'required|numeric|gt:0',
+        'tickets.vip' => 'required|numeric|gt:0',
+        'gcash' => 'required',
+    ]);
+    
+    $concert = auth()->user()->concerts()->create([
+        'name' => $this->name,
+        'description' => $this->description,
+        'reservation_start' => $this->firstDay,
+        'reservation_end' => $this->lastDay,
+        'concert_start' => Carbon::create(
+            $this->concertDayStart->year, 
+            $this->concertDayStart->month, 
+            $this->concertDayStart->day,
+            $this->concertStart['time'] === 'AM' ? $this->concertStart['hour'] : $this->concertStart['hour'] + 12,
+            $this->concertStart['minute'],
+            0
+        ),
+        'concert_end' => Carbon::create(
+            $this->concertDayEnd->year, 
+            $this->concertDayEnd->month, 
+            $this->concertDayEnd->day,
+            $this->concertEnd['time'] === 'AM' ? $this->concertEnd['hour'] : $this->concertEnd['hour'] + 12,
+            $this->concertEnd['minute'],
+            0
+        ),
+        'vip_price' => $this->tickets['vip'],
+        'general_price' => $this->tickets['general'],
+        'gcash' => $this->gcash,
+    ]);
+
+    $image = $concert->image()->create([
+        'url' => $this->concertPhoto->storePublicly('photos'),
+    ]);
+    
+    $concert->qrImage()->create([
+        'url' => $this->gcashPhoto->storePublicly('photos'),
+    ]);
+
+    for($row = 0; $row < 9; $row++) {
+        for ($column = 0; $column < 20; $column++) {
+            $vip = $this->vipSeats->map(function ($value) use ($row, $column) {
+                if ($value['row'] === $row && $value['column'] === $column) {
+                        return true;
+                } else {
+                    return false;
+                }
+            })->search(true) !== false;
+
+            $concert->tickets()->create([
+                'row' => $row,
+                'column' => $column,
+                'vip' => $vip
+            ]);
+        };
+    };
+
+    
+    // dd($concert);
+    return $this->redirect(route('organizer.concerts.index', absolute: false), navigate: true);
+};
+
 ?>
 <div class="">
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -135,6 +208,7 @@ $changeSeatState = function ($row, $column) {
                             <input wire:model='concertPhoto' id="concert-photo" type="file" class="hidden" />
                         </label>
                     </div>
+                    <x-input-error :messages="$errors->get('concertPhoto')" class="mt-2" />
                 </div>
 
                 {{-- Name --}}
@@ -148,7 +222,7 @@ $changeSeatState = function ($row, $column) {
                 <div class="mt-4">
                     <x-input-label>Description</x-input-label>
                     <textarea rows="5" wire:model="description" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-violet-600 rounded-md shadow-sm" ></textarea>
-                    <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                    <x-input-error :messages="$errors->get('description')" class="mt-2" />
                 </div>
 
                 {{-- Date --}}
@@ -297,7 +371,16 @@ $changeSeatState = function ($row, $column) {
                             </div>
                         </div>
                     </div>
-                    <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                    <div class="flex gap-6 mt-2">
+                        <div class="w-full">
+                            <x-input-error :messages="$errors->get('concertStart.hour')" class="mt-2" />
+                            <x-input-error :messages="$errors->get('concertStart.minute')" class="mt-2" />
+                        </div>
+                        <div class="w-full">
+                            <x-input-error :messages="$errors->get('concertEnd.hour')" class="mt-2" />
+                            <x-input-error :messages="$errors->get('concertEnd.minute')" class="mt-2" />
+                        </div>
+                    </div>
                     <span class="text-xs text-gray-500">This is how concert goers know when to come</span>
                 </div>
 
@@ -317,6 +400,10 @@ $changeSeatState = function ($row, $column) {
                             <x-text-input wire:model="tickets.vip" class="block flex-1 px-1 text-end text-lg py-2" type="number" required />
                             <div class="my-auto me-4 ms-2 font-bold text-gray-600">&#8369;</div>
                         </div>
+                    </div>
+                    <div class="flex gap-5">
+                        <x-input-error :messages="$errors->get('tickets.general')" class="mt-2 w-full" />
+                        <x-input-error :messages="$errors->get('tickets.vip')" class="mt-2 w-full" />
                     </div>
                     {{-- <x-input-error :messages="$errors->get('name')" class="mt-2" /> --}}
                 </div>
@@ -347,8 +434,8 @@ $changeSeatState = function ($row, $column) {
                             <input wire:model='gcashPhoto' id="gcash-photo" type="file" class="hidden" />
                         </label>
                     </div>
+                    <x-input-error :messages="$errors->get('gcashPhoto')" class="mt-2" />
                 </div>
-
             </div>
         </div>
     </div>
@@ -390,6 +477,6 @@ $changeSeatState = function ($row, $column) {
     </div>
     <div class="flex justify-end gap-2 mt-6">
         <a href="{{ route('organizer.concerts.index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-transparent rounded-md font-semibold text-xs text-slate-900 uppercase tracking-widest transition ease-in-out duration-150">Cancel</a>
-        <x-primary-button >Next</x-primary-button>
+        <x-primary-button wire:click='save'>Next</x-primary-button>
     </div>
 </div>

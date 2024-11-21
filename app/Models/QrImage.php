@@ -11,6 +11,8 @@ class QrImage extends Model
     /** @use HasFactory<\Database\Factories\QrImageFactory> */
     use HasFactory;
 
+    protected $guarded = [''];
+
     public function imageable(): MorphTo
     {
         return $this->morphTo();

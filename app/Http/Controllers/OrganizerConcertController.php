@@ -13,7 +13,11 @@ class OrganizerConcertController extends Controller
      */
     public function index()
     {
-        return view('organizers.events.index');
+        $organizer = auth()->user();
+        // dd($organizer->concerts->first()->Image);
+        return view('organizers.events.index', [
+            'concerts' => $organizer->concerts,
+        ]);
     }
 
     public function schedule()

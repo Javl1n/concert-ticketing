@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('qr_images', function (Blueprint $table) {
             $table->id();
+            $table->string('url');
+            $table->morphs('imageable');
             $table->timestamps();
         });
     }

@@ -11,7 +11,9 @@
 
     <div class="py-8">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            
+            @foreach ($concerts as $concert)
+                <img class="w-20 h-20" src="{{ asset($concert->image->url) }}" alt="">
+            @endforeach
         </div>
     </div> 
 </x-app-layout>
