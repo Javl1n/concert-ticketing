@@ -3,16 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ticket;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class TicketController extends Controller
 {
+
+    protected function guard()
+    {
+        if (!auth('web')->check() && auth('organizer')->check()) {
+            return redirect('organizer/dashboard');
+        }
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $this->guard();
+        return view('user.tickets.index', [
+            'tickets' => Ticket::where('user_id', auth()->user()->id)->get(),
+            'carbon' => Carbon::now()
+        ]);
     }
 
     /**

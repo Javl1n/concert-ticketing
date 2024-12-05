@@ -26,19 +26,20 @@ class LoginForm extends Form
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function authenticate(): void
+    public function authenticate()
     {
         $this->ensureIsNotRateLimited();
 
-        if (Auth::guard('web')->attempt($this->only(['email', 'password']), $this->remember)) {
-            RateLimiter::clear($this->throttleKey());
-            return;
-        }
-
         if (Auth::guard('organizer')->attempt($this->only(['email', 'password']), $this->remember)) {
             RateLimiter::clear($this->throttleKey());
-            return;
+            return "organizer";
         }
+
+        if (Auth::guard('web')->attempt($this->only(['email', 'password']), $this->remember)) {
+            RateLimiter::clear($this->throttleKey());
+            return "web";
+        }
+
 
         RateLimiter::hit($this->throttleKey());
 

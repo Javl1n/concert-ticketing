@@ -13,11 +13,17 @@ form(LoginForm::class);
 $login = function () {
     $this->validate();
 
-    $this->form->authenticate();
+    $session = $this->form->authenticate();
 
     Session::regenerate();
 
-    $this->redirectIntended(default: route('user.home', absolute: false), navigate: true);
+    if ($session === "organizer") {
+        $this->redirectIntended(default: route('organizer.dashboard', absolute: false), navigate: true);
+    }
+
+    if ($session === "web") {
+        $this->redirectIntended(default: route('user.home', absolute: false), navigate: true);
+    }
 };
 
 ?>

@@ -27,7 +27,8 @@ state([
         'general' => 50.00,
         'vip' => 100.00
     ]),
-    'gcash',
+    'gcashName',
+    'gcashNumber',
     'gcashPhoto',
     'vipSeats' => function () {
         $collection = collect([]);
@@ -122,7 +123,8 @@ $save = function () {
         'concertEnd.minute' => 'required|numeric|lt:60|gte:0',
         'tickets.general' => 'required|numeric|gt:0',
         'tickets.vip' => 'required|numeric|gt:0',
-        'gcash' => 'required',
+        'gcashName' => 'required',
+        'gcashNumber' => 'required',
     ]);
     
     $concert = auth()->user()->concerts()->create([
@@ -148,7 +150,8 @@ $save = function () {
         ),
         'vip_price' => $this->tickets['vip'],
         'general_price' => $this->tickets['general'],
-        'gcash' => $this->gcash,
+        'gcash_name' => $this->gcashName,
+        'gcash_number' => $this->gcashNumber,
     ]);
 
     $image = $concert->image()->create([
@@ -163,7 +166,7 @@ $save = function () {
         for ($column = 0; $column < 20; $column++) {
             $vip = $this->vipSeats->map(function ($value) use ($row, $column) {
                 if ($value['row'] === $row && $value['column'] === $column) {
-                        return true;
+                    return true;
                 } else {
                     return false;
                 }
@@ -410,9 +413,14 @@ $save = function () {
 
                 {{-- Gcash --}}
                 <div class="mt-4">
+                    <x-input-label>Gcash Name</x-input-label>
+                    <x-text-input wire:model="gcashName" class="block mt-1 w-full" type="text" required />
+                    <x-input-error :messages="$errors->get('gcashName')" class="mt-2" />
+                </div>
+                <div class="mt-4">
                     <x-input-label>Gcash Number</x-input-label>
-                    <x-text-input wire:model="gcash" class="block mt-1 w-full" type="text" required />
-                    <x-input-error :messages="$errors->get('gcash')" class="mt-2" />
+                    <x-text-input wire:model="gcashNumber" class="block mt-1 w-full" type="text" required />
+                    <x-input-error :messages="$errors->get('gcashNumber')" class="mt-2" />
                 </div>
 
                 {{-- QR --}}
@@ -445,11 +453,11 @@ $save = function () {
                 <h1 class="text-xl font-bold">Seating</h1>
                 <div class="flex gap-4">
                     <div class="flex gap-2">
-                         <div class="w-8 h-[2px] bg-gray-600 my-auto"></div>
-                         General Admission
+                         <div class="w-8 h-[3px] bg-gray-600 my-auto"></div>
+                         <p>General Admission</p>
                     </div>
                     <div class="flex gap-2">
-                        <div class="w-8 h-[2px] bg-purple-500 my-auto"></div>
+                        <div class="w-8 h-[3px] bg-purple-500 my-auto"></div>
                         VIP
                     </div>
                </div>
@@ -468,7 +476,8 @@ $save = function () {
                                 })->search(true) !== false
                                 ? 'bg-purple-500' 
                                 : 'hover:bg-purple-100'
-                            }} transition w-full h-10 bg-gray-600 rounded {{ $column === 10 ? 'ms-10' : '' }}"></button>
+                            }} transition w-full h-10 bg-gray-600 rounded {{ $column === 10 ? 'ms-10' : '' }}">
+                            </button>
                         @endfor
                     </div>
                 @endfor

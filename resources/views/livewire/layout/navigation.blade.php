@@ -31,11 +31,11 @@ $logout = function (Logout $logout) {
                             {{ __('Your Concerts') }}
                         </x-nav-link>
                     @elseauth('web')
-                        <x-nav-link :href="route('user.home')" :active="request()->routeIs('user.home')" wire:navigate>
+                        <x-nav-link :href="route('user.home')" :active="request()->routeIs('user.home') || request()->routeIs('user.concert*')" wire:navigate>
                             {{ __('Home') }}
                         </x-nav-link>
 
-                        <x-nav-link :href="route('user.home')" :active="request()->routeIs('dashboard')" wire:navigate>
+                        <x-nav-link :href="route('user.ticket.index')" :active="request()->routeIs('user.ticket.*')" wire:navigate>
                             {{ __('Tickets') }}
                         </x-nav-link>
                     @endauth

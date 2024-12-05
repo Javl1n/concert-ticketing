@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('concert_id')->constrained();
             $table->foreignId('user_id')->nullable()->constrained();
             $table->boolean('vip')->default(false);
+            $table->boolean('approved')->nullable();
             $table->integer('row');
             $table->integer('column');
             $table->timestamps();

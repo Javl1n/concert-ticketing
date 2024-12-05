@@ -21,7 +21,8 @@ return new class extends Migration
             $table->timestamp('concert_end');
             $table->decimal('vip_price', places: 2);
             $table->decimal('general_price', places: 2);
-            $table->string('gcash');
+            $table->string('gcash_number');
+            $table->string('gcash_name');
             $table->foreignId('organizer_id');
             $table->timestamps();
         });

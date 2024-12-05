@@ -2,23 +2,23 @@
 
 use App\Http\Controllers\ConcertController;
 use App\Http\Controllers\OrganizerConcertController;
+use App\Http\Controllers\TicketController;
+use App\Models\Concert;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'welcome')->middleware(['guest:web,organizer']);
-
-Route::get('home', function () {
-    if (!auth('web')->check() && auth('organizer')->check()) {
-        return redirect('organizer/dashboard');
-    }
-    return view('user.home');
-})
-    ->name('user.home');
+Route::get('/', function () {
+    return view('welcome', [
+        'concerts' => Concert::where('concert_start', '>', Carbon::now())->orderBy('concert_start')->get(),
+    ]);
+})->middleware(['guest:web,organizer']);
 
 Route::view('organizer/dashboard', 'organizers/dashboard')
     ->middleware(['auth:organizer', 'verified'])
     ->name('organizer.dashboard');
 
-Route::controller(OrganizerConcertController::class)->middleware(['auth:organizer', 'verified'])->group(function () {
+Route::controller(OrganizerConcertController::class)->middleware(['auth:organizer', 'verified'])
+->group(function () {
     Route::get('organizer/concerts', 'index')
         ->name('organizer.concerts.index');
 
@@ -30,6 +30,25 @@ Route::controller(OrganizerConcertController::class)->middleware(['auth:organize
 
     Route::get('organizer/concerts/{concert}', 'show')
         ->name('organizer.concerts.show');
+});
+
+Route::controller(ConcertController::class)
+->middleware(['auth:web'])
+->group(function () {
+    Route::get('home', 'index')
+        ->name('user.home');
+
+    Route::get('concert/{concert}', 'show')
+        ->name('user.concert.show');
+
+    Route::get('concert/{concert}/order', 'order')
+        ->name('user.concert.order');
+});
+
+Route::controller(TicketController::class)
+->group(function () {
+    Route::get('ticket/index', 'index')
+        ->name('user.ticket.index');
 });
 
 

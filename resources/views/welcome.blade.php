@@ -90,53 +90,19 @@
             <!-- Page Content -->
             <main>
                 <div class="py-12">
-                    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                        {{-- <img src="{{ asset('storage/sample.png') }}" alt=""> --}}
-                        <a href="#" class=""
-                            >
-                            <div style='background-image: url("{{ asset('storage/sample.png') }}");' class="rounded-3xl flex flex-col justify-between px-20 py-10">
-                                <div class="max-w-xl">
-                                    <h5 class="mb-2 text-7xl font-semibold tracking-tight text-white leading-relaxed">
-                                        The City Wide Music Festival
-                                    </h5>
-                                    <p class="mb-3 font-normal text-white">
-                                        Lorem ipsum  dolor sit amet consectetur adipisicing elit. Quasi repellat aut fugit perferendis rerum alias vitae, inventore voluptas ducimus consequuntur nisi magnam voluptatum quibusdam mollitia debitis enim? Minus, illo praesentium!
-                                    </p>
-                                    {{-- <div class="relative w-full mt-4">
-                                        <input type="text" class="w-full rounded-lg py-2 pr-10 h-10" placeholder="Search..."
-                                            name="SearchBar">
-                                        <i class="fa-solid fa-magnifying-glass absolute"
-                                            style="right: 10px; top: 50%; transform: translateY(-50%); color: #A0AEC0;"></i>
-                                    </div> --}}
-                                </div>
-
-                                
-                            </div>
-                        </a>
-                    </div>
+                    @php
+                        $firstConcert = $concerts->sortBy('concert_start')->first();
+                    @endphp
+                    @if ($firstConcert)
+                        <x-user.events.show-banner :concert=$firstConcert />
+                    @endif
                     <div class="max-w-7xl mx-auto mt-6 sm:px-6 lg:px-8">
                         <h1 class="font-bold text-3xl">New Concerts</h1>
                         <div class="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-5">
-                            <a 
-                                href="#" 
-                                class="items-center justify-center bg-white rounded-lg md:flex-row md:max-w-xl"
-                            >
-                                <img 
-                                    class="object-cover  rounded-t-lg md:h-auto md:rounded-none md:rounded-s-lg"
-                                    src="{{ asset('storage/newConcert.png') }}" 
-                                    alt=""
-                                >
-                                <div class="flex flex-col justify-between py-4 leading-normal">
-                                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">Sample Concert
-                                        2024</h5>
-                                    <p class="mb-3 font-normal text-gray-700">Lorem ipsum dolor sit amet
-                                        consectetur
-                                        adipisicing elit. Laborum ab ad temporibus non architecto porro et, magni perferendis
-                                        debitis
-                                        nesciunt?</p>
-                                </div>
-                            </a>
-                            <!-- Repeat the card structure as needed -->
+                            @foreach ($concerts as $concert)
+                                {{-- @continue($loop->first) --}}
+                                <x-user.events.show-card :$concert />
+                            @endforeach
                         </div>
                     </div>
                 </div>
