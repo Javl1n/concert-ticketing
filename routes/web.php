@@ -30,6 +30,9 @@ Route::controller(OrganizerConcertController::class)->middleware(['auth:organize
 
     Route::get('organizer/concerts/{concert}', 'show')
         ->name('organizer.concerts.show');
+    
+    Route::get('organizer/concerts/{concert}/print', 'print')
+        ->name('organizer.sales.print');
 });
 
 Route::controller(ConcertController::class)
@@ -43,7 +46,6 @@ Route::controller(ConcertController::class)
 
     Route::get('concert/{concert}/order', 'order')
         ->name('user.concert.order');
-
 });
 
 Route::controller(TicketController::class)

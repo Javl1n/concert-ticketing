@@ -64,6 +64,22 @@ class OrganizerConcertController extends Controller
         ]);
     }
 
+    public function print(Concert $concert)
+    {
+        $total = 0.00;
+        foreach ($concert->tickets as $ticket) {
+            if($ticket->user !== null && $ticket->approved) {
+                $total += $ticket->vip ? $concert->vip_price : $concert->general_price;
+            }
+        }
+        
+        return view('organizers.events.print', [
+            'concert' => $concert,
+            'carbon' => new Carbon,
+            'total' => $total
+        ]);
+    }
+
     /**
      * Show the form for editing the specified resource.
      */

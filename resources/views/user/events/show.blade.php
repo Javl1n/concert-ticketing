@@ -15,17 +15,6 @@
                               <p class="text-gray-700 mt-2">{{ $concert->description }}</p>
                          </div>
                          <div class="grid grid-cols-3 gap-6 mt-4">
-                              {{-- <div>
-                                   <h2 class="text-xl font-semibold mb-4">Date</h2>
-                                   <div class="flex mb-2">
-                                        <span class="text-gray-600 w-12">From:</span>
-                                        <span class="text-gray-800">{{ $carbon->create($concert->reservation_start)->format('F j, Y') }}</span>
-                                   </div>
-                                   <div class="flex">
-                                        <span class="text-gray-600 w-12">To:</span>
-                                        <span class="text-gray-800">{{ $carbon->create($concert->reservation_end)->format('F j, Y') }}</span>
-                                   </div>
-                              </div> --}}
                               <div>
                                    <h2 class="text-xl font-semibold mb-4">Concert Starts</h2>
                                    <div class="flex mb-2">

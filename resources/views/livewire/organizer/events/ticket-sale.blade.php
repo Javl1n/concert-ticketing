@@ -29,7 +29,7 @@ $disapprove = function () {
 ?>
 
 <div class="">
-    <div x-on:click="$dispatch('open-modal', '{{ $ticket->id }}')" class="grid grid-cols-12 py-1 {{ $this->ticket->user !== null ? 'hover:bg-gray-50 cursor-pointer' : 'text-gray-400' }}" wire:poll>
+    <div x-on:click="$dispatch('open-modal', '{{ $ticket->id }}')" class="grid grid-cols-12 py-1 {{ $this->ticket->user !== null ? 'hover:bg-gray-50 cursor-pointer' : 'text-gray-400 bg-gray-100' }}" wire:poll>
         <h1 class="col-span-1 text-center">{{ $ticket->row + 1 }}</h1>
         <h1 class="col-span-2 text-center">{{ $ticket->column + 1 }}</h1>
         <h1 class="col-span-3 text-center">{{ $ticket->vip ? "VIP" : "General Admission" }}</h1>

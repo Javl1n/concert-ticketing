@@ -58,23 +58,7 @@
                     <p class="my-2">Gcash: {{ $concert->gcash }}</p>
                     <img src="{{ asset($concert->qrImage->url) }}" class="border mt-4 " alt="">
                 </div>
-                <div class="bg-white p-8 rounded-xl shadow col-span-2 flex flex-col">
-                    <h2 class="text-xl font-semibold">Ticket Sales</h2>
-                    <div class="border p-2 mt-2 flex-1">
-                        <div class="grid grid-cols-12 font-bold border-b pb-2">
-                            <h1 class="col-span-1 text-center">Row</h1>
-                            <h1 class="col-span-2 text-center">Column</h1>
-                            <h1 class="col-span-3 text-center">Ticket Type</h1>
-                            <h1 class="col-span-3 text-center">Costumer</h1>
-                            <h1 class="col-span-3 text-center">Status</h1>
-                        </div>
-                        <div class="h-80 overflow-auto">
-                            @foreach ($concert->tickets as $ticket)
-                                @livewire('organizer/events/ticket-sale', ['ticket' => $ticket], key($ticket->id))
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
+                @livewire('organizer.events.sale', ['concert' => $concert])
             </div>
             <div class="bg-white p-8 mt-4 rounded-xl shadow">
                 <h2 class="text-xl font-semibold">Seating</h2>
