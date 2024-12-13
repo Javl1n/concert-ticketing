@@ -43,12 +43,16 @@ Route::controller(ConcertController::class)
 
     Route::get('concert/{concert}/order', 'order')
         ->name('user.concert.order');
+
 });
 
 Route::controller(TicketController::class)
 ->group(function () {
     Route::get('ticket/index', 'index')
         ->name('user.ticket.index');
+
+    Route::get('ticket/{ticket}/delete', 'destroy')
+        ->name('user.ticket.delete');
 });
 
 

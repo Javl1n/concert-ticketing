@@ -17,16 +17,16 @@ $logout = function (Logout $logout) {
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('user.home') }}" wire:navigate>
+                    <a href="{{ route('organizer.concerts.index') }}" wire:navigate>
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
                     </a>
                 </div>
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     @auth('organizer')
-                        <x-nav-link :href="route('organizer.dashboard')" :active="request()->routeIs('organizer.dashboard')" wire:navigate>
+                        {{-- <x-nav-link :href="route('organizer.dashboard')" :active="request()->routeIs('organizer.dashboard')" wire:navigate>
                             {{ __('Dashboard') }}
-                        </x-nav-link>
+                        </x-nav-link> --}}
                         <x-nav-link :href="route('organizer.concerts.index')" :active="request()->routeIs('organizer.concerts.*')" wire:navigate>
                             {{ __('Your Concerts') }}
                         </x-nav-link>

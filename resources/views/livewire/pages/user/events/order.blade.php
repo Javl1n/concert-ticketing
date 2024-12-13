@@ -4,6 +4,7 @@ use function Livewire\Volt\{state, usesFileUploads};
 
 use App\Models\Concert;
 
+
 usesFileUploads();
 
 state([
@@ -59,8 +60,10 @@ $submit = function () {
     $ticket = $this->concert->tickets
         ->where("row", $seat['row'])
         ->where("column", $seat['column'])->first();
+    
     $ticket->update([
-        'user_id' => auth()->user()->id
+        'user_id' => auth()->user()->id,
+        'bought_at' => now()
     ]);
 
     $ticket->receipt()->create([

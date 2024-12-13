@@ -18,7 +18,7 @@ $login = function () {
     Session::regenerate();
 
     if ($session === "organizer") {
-        $this->redirectIntended(default: route('organizer.dashboard', absolute: false), navigate: true);
+        $this->redirectIntended(default: route('organizer.concerts.index', absolute: false), navigate: true);
     }
 
     if ($session === "web") {

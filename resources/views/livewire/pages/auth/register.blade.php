@@ -37,7 +37,7 @@ $register = function () {
         event(new Registered($user = Organizer ::create($validated)));
         // $user = Organizer::create($validated);
         Auth::guard('organizer')->login($user);
-        $this->redirect(route('organizer.dashboard', absolute: false), navigate: true);
+        $this->redirect(route('organizer.concerts.index', absolute: false), navigate: true);
     } else if (!$this->organizer) {
         event(new Registered($user = User::create($validated)));
         Auth::guard('web')->login($user);

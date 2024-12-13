@@ -6,6 +6,7 @@
 
 <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
      {{-- <img src="{{ asset('storage/sample.png') }}" alt=""> --}}
+     
      <a href="{{ route('user.concert.show', [$concert]) }}" class="">
           <div style='background-image: url("{{ asset($concert->image->url) }}");' class="rounded-3xl flex flex-col justify-between bg-center bg-cover bg-no-repeat bg-white">
                <div class="bg-black/30 px-20 py-10 rounded-3xl">

@@ -64,9 +64,9 @@
                         <div class="grid grid-cols-12 font-bold border-b pb-2">
                             <h1 class="col-span-1 text-center">Row</h1>
                             <h1 class="col-span-2 text-center">Column</h1>
-                            <h1 class="col-span-3">Ticket Type</h1>
-                            <h1 class="col-span-3">Costumer</h1>
-                            <h1 class="col-span-3">Receipt Detail</h1>
+                            <h1 class="col-span-3 text-center">Ticket Type</h1>
+                            <h1 class="col-span-3 text-center">Costumer</h1>
+                            <h1 class="col-span-3 text-center">Status</h1>
                         </div>
                         <div class="h-80 overflow-auto">
                             @foreach ($concert->tickets as $ticket)

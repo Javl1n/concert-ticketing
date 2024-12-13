@@ -72,6 +72,12 @@ class TicketController extends Controller
      */
     public function destroy(Ticket $ticket)
     {
-        //
+        $ticket->update([
+            'approved' => null,
+            'bought_at' => null,
+            'user_id' => null
+        ]);
+
+        return redirect(route('user.ticket.index'));
     }
 }

@@ -81,24 +81,32 @@ $nextPage = function () {
         </div>
         <div class="grid grid-cols-7">
             @for($blankStart = 1; $blankStart <= $this->now->copy()->day(1)->dayOfWeek; $blankStart++)
-                <div class="h-32 border pt-2 ps-2">
+                <div class="h-32 border pt-2 ps-2 bg-gray-200">
                 </div>
             @endfor
             @for ($item = 1; $item <= $this->now->copy()->daysInMonth; $item++)
-                @if($concert = $this->concerts->where('reservation_start', '<=', $this->now->copy()->day($item)->format('Y-m-d'))->where('reservation_end', '>=', $this->now->copy()->day($item)->format('Y-m-d'))->first())
-                    
+                @if($concert = $this->concerts
+                    ->where('reservation_start', '<=', $this->now->copy()->day($item))
+                    ->where('reservation_end', '>=', $this->now->copy()->day($item))->first()
+                )
                     <div class="text-sm h-32 border pt-2 ps-2 transition text-white font-bold {{ $concert->organizer->id === auth()->user()->id ? 'bg-green-500 ' : 'bg-red-500' }}">
                         {{ $this->now->copy()->day($item)->format('j') }}
                     </div>
                 @else
-                    <div wire:click='selectDay({{ $item }})' class="text-sm h-32 border pt-2 ps-2 transition cursor-pointer {{ $this->days->search($item) !== false ? 'bg-purple-500 text-white font-bold border-purple-500' : 'hover:bg-purple-100' }}">
-                        {{ $this->now->copy()->day($item)->format('j') }}
-                    </div>
+                    @if($this->now->day >= $this->now->copy()->day($item)->day)
+                        <div class=" bg-gray-50 text-sm h-32 border pt-2 ps-2 transition text-gray-400">
+                            {{ $this->now->copy()->day($item)->format('j') }}
+                        </div>
+                    @else
+                        <div wire:click='selectDay({{ $item }})' class="text-sm h-32 border pt-2 ps-2 transition cursor-pointer {{ $this->days->search($item) !== false ? 'bg-purple-500 text-white font-bold border-purple-500' : 'hover:bg-purple-100' }}">
+                            {{ $this->now->copy()->day($item)->format('j') }}
+                        </div>
+                    @endif
                 @endif
                 
             @endfor
             @for($blankEnd = 0; $blankEnd < 6 - $this->now->copy()->day($this->now->daysInMonth)->dayOfWeekIso; $blankEnd++)
-                <div class="h-32 border pt-2 ps-2">
+                <div class="h-32 border pt-2 ps-2 bg-gray-200">
                 </div>
             @endfor
         </div>
